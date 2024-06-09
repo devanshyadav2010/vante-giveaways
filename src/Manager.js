@@ -263,6 +263,7 @@ class GiveawaysManager extends EventEmitter {
                 .setCustomId(`${giveaway.isDrop ? 'vante-drop' : 'vante-enter'}`),
                            new Discord.ButtonBuilder()
                 .setEmoji(`${this.options.default.button2Emoji}`)
+                .setLabel(`Participants`)
                 .setStyle(typeof this.options.default.button2Style === 'number' ? this.options.default.button2Style : Discord.ButtonStyle.Secondary)
                 .setCustomId(`${giveaway.isDrop ? 'vante-drop-participants' : 'vante-enter-participants'}`),
             )
@@ -606,6 +607,18 @@ class GiveawaysManager extends EventEmitter {
      */
     async _handleRawPacket(packet) {
         if (!packet.isButton()) return;
+        if (packet.customId !== 'vante-enter-patricipants') {
+            let giveaway = this.giveaways.find((g) => g.messageId === packet.message?.id);
+        if (!giveaway || (giveaway.ended)) return;
+            const embed = new Discord.EmbedBuilder()
+            .setTitle(`Giveaway Participants`)
+            .setDescription(giveaway.fetchAllEntrants)
+            const vante = (await giveaway.fetchMessage().catch(() => {})) ?? giveaway.message;
+            vante.reply({
+                embeds: [embed],
+                components: [row]
+            })
+        }
         if (packet.user.id === this.client.user.id) return;
         if (packet.customId !== 'vante-enter') return
         let giveaway = this.giveaways.find((g) => g.messageId === packet.message?.id);
