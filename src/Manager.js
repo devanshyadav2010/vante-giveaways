@@ -260,7 +260,11 @@ class GiveawaysManager extends EventEmitter {
             .addComponents(new Discord.ButtonBuilder()
                 .setEmoji(`${this.options.default.buttonEmoji}`)
                 .setStyle(typeof this.options.default.buttonStyle === 'number' ? this.options.default.buttonStyle : Discord.ButtonStyle.Secondary)
-                .setCustomId(`${giveaway.isDrop ? 'vante-drop' : 'vante-enter'}`)
+                .setCustomId(`${giveaway.isDrop ? 'vante-drop' : 'vante-enter'}`),
+                           new Discord.ButtonBuilder()
+                .setEmoji(`${this.options.default.button2Emoji}`)
+                .setStyle(typeof this.options.default.button2Style === 'number' ? this.options.default.button2Style : Discord.ButtonStyle.Secondary)
+                .setCustomId(`${giveaway.isDrop ? 'vante-drop-participants' : 'vante-enter-participants'}`),
             )
 
             const embed = this.generateMainEmbed(giveaway);
